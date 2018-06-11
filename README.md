@@ -1,5 +1,18 @@
 # Image Classification - TensorFlow in Go
-## Run locally
+## Run With Docker
+The easiest way to run this project is through docker. First, build the image.
+```
+docker build -t tensorgo .
+```
+
+And then run the image in a container and publish port to 3000
+```
+docker run --publish 3000:3000 tensorgo --rm
+```
+
+Now you can see the app on `localhost:3000`!
+
+## Run Without Docker
 ### Prerequisites
 * Go 1.8+
 * Node 6+

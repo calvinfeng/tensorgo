@@ -3,8 +3,8 @@ FROM golang:1.10
 
 LABEL authors="Calvin Feng"
 
-COPY . /go/src/go-academy/tensor_go
-WORKDIR /go/src/go-academy/tensor_go
+COPY . /go/src/tensorgo
+WORKDIR /go/src/tensorgo
 
 EXPOSE 3000
 
@@ -28,4 +28,4 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && apt-get install -y
 RUN npm install
 RUN npm run build
 
-CMD tensor_go server
+CMD tensorgo server
