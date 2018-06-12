@@ -1,3 +1,4 @@
+// Package tensorcv provides computer vision handlers for handling image recognition requests.
 package tensorcv
 
 import (

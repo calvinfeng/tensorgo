@@ -1,8 +1,7 @@
+// Package tensorcv provides computer vision handlers for handling image recognition requests.
 package tensorcv
 
 import (
-	"github.com/gorilla/mux"
-
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -10,17 +9,6 @@ import (
 	"net/http"
 	"strings"
 )
-
-// LoadRoutes returns a http.Handler as a multiplexer to various routes.
-func LoadRoutes(labels map[int]string, modelPath string) http.Handler {
-	r := mux.NewRouter()
-	api := r.PathPrefix("/api").Subrouter()
-	api.Handle("/tf/recognition/", NewImageRecognitionHandler(labels, modelPath)).Methods("POST")
-	api.Handle("/tf/hello/", NewHelloWorldHandler()).Methods("GET")
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
-
-	return r
-}
 
 // Response defines the structure of a HTTP JSON response to client.
 type Response struct {
@@ -79,18 +67,11 @@ func NewImageRecognitionHandler(labels map[int]string, modelPath string) http.Ha
 				message += fmt.Sprintf(" %s ", labels[classList[i].Index])
 			}
 
-			response := &Response{
-				Status:  http.StatusOK,
-				Message: message,
-			}
-
-			if resBytes, err := json.Marshal(response); err == nil {
-				w.WriteHeader(http.StatusOK)
-				w.Write(resBytes)
-			}
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			renderResponse(w, http.StatusOK, message)
+			return
 		}
+
+		renderResponse(w, http.StatusInternalServerError, "failed to run TF model")
 	}
 }
 
@@ -104,5 +85,20 @@ func NewHelloWorldHandler() http.HandlerFunc {
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(msg))
+	}
+}
+
+func renderResponse(w http.ResponseWriter, status int, msg string) {
+	res := &Response{
+		Status:  status,
+		Message: msg,
+	}
+
+	if resBytes, err := json.Marshal(res); err == nil {
+		w.WriteHeader(status)
+		w.Write(resBytes)
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 	}
 }
