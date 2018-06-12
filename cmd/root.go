@@ -12,7 +12,7 @@ import (
 
 // Model Path
 const (
-	ResNet = "./model/resnet"
+	ResNet = "./model/resnet_50_model"
 )
 
 var labels map[int]string
