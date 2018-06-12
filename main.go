@@ -2,7 +2,7 @@
 
 package main
 
-import "go-academy/tensor_go/cmd"
+import "tensorgo/cmd"
 
 func main() {
 	cmd.Execute()

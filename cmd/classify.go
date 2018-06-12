@@ -3,8 +3,8 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"go-academy/tensor_go/tensorcv"
 	"strings"
+	"tensorgo/tensorcv"
 
 	"github.com/spf13/cobra"
 )

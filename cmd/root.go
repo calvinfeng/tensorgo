@@ -4,8 +4,8 @@ package cmd
 
 import (
 	"fmt"
-	"go-academy/tensor_go/tensorcv"
 	"os"
+	"tensorgo/tensorcv"
 
 	"github.com/spf13/cobra"
 )

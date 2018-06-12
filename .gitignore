@@ -1,3 +1,6 @@
 environment/
 node_modules/
 .vscode/
+vendor/
+tf_models/resnet_50_model
+tf_models/mnist_model

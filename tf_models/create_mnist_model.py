@@ -45,7 +45,7 @@ def main():
                                                      feed_dict={x: test_x, labels: test_y})
 
             print 'Time to save the graph!'
-            builder = tf.saved_model.builder.SavedModelBuilder('model')
+            builder = tf.saved_model.builder.SavedModelBuilder('mnist_model')
             builder.add_meta_graph_and_variables(sess, ['serve'])
             builder.save()
 

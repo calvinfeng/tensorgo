@@ -20,6 +20,18 @@ RUN ldconfig
 # Hide some warnings
 ENV TF_CPP_MIN_LOG_LEVEL 2
 
+# Install Python.
+RUN \
+  apt-get update && \
+  apt-get install -y python python-dev python-pip python-virtualenv && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN pip install -r requirements.txt
+
+# Create the residual neural network model
+RUN python ./tf_models/create_resnet_model.py
+
+# Install Go dependencies
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN go install
 
