@@ -8,6 +8,9 @@ import * as ReactDOM from 'react-dom';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 
+// Components
+import BarChart from './components/bar_chart';
+
 // Helpers
 import { classifyImageFile } from './util';
 
@@ -122,6 +125,7 @@ class Index extends React.Component<any, IndexState> {
                     {this.result}
                     {this.error}
                 </section>
+                <BarChart />
             </section>
         )
     }
