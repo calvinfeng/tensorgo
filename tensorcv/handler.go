@@ -10,10 +10,16 @@ import (
 	"strings"
 )
 
-// Response defines the structure of a HTTP JSON response to client.
-type Response struct {
+// ErrorRes defines the structure of a HTTP error JSON response to client.
+type ErrorRes struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
+}
+
+// SuccessRes defines the structures of a HTTP success JSON response to client.
+type SuccessRes struct {
+	Status  int      `json:"status"`
+	Results []*Class `json:"results"`
 }
 
 // NewImageRecognitionHandler returns a HTTP handler that will handle a request to perform image
@@ -24,15 +30,7 @@ func NewImageRecognitionHandler(labels map[int]string, modelPath string) http.Ha
 
 		imgFile, header, err := r.FormFile("image")
 		if err != nil {
-			response := &Response{
-				Status:  http.StatusBadRequest,
-				Message: err.Error(),
-			}
-
-			if resBytes, err := json.Marshal(response); err == nil {
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(resBytes)
-			}
+			renderErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
@@ -54,24 +52,25 @@ func NewImageRecognitionHandler(labels map[int]string, modelPath string) http.Ha
 
 		softmaxScore := RunResNetModel(imgTensor, modelPath)
 		if softmaxScore != nil {
-			classList := make([]Class, 0, len(softmaxScore[0]))
+			classList := make([]*Class, 0, len(softmaxScore[0]))
 			for idx, prob := range softmaxScore[0] {
-				classList = append(classList, Class{Prob: prob, Index: idx})
+				classList = append(classList, &Class{Prob: prob, Index: idx})
 			}
 
 			// Perform sorting
 			Sort(classList, 0, len(classList)-1)
 
-			message := fmt.Sprintf("Most probable classes: ")
-			for i := len(classList) - 1; i > len(classList)-6; i-- {
-				message += fmt.Sprintf(" %s ", labels[classList[i].Index])
+			top5Results := classList[len(classList)-6 : len(classList)-1]
+
+			for _, result := range top5Results {
+				result.Name = labels[result.Index]
 			}
 
-			renderResponse(w, http.StatusOK, message)
+			renderResult(w, top5Results)
 			return
 		}
 
-		renderResponse(w, http.StatusInternalServerError, "failed to run TF model")
+		renderErrorResponse(w, http.StatusInternalServerError, "failed to run TF model")
 	}
 }
 
@@ -88,8 +87,23 @@ func NewHelloWorldHandler() http.HandlerFunc {
 	}
 }
 
-func renderResponse(w http.ResponseWriter, status int, msg string) {
-	res := &Response{
+func renderResult(w http.ResponseWriter, results []*Class) {
+	res := &SuccessRes{
+		Status:  http.StatusOK,
+		Results: results,
+	}
+
+	if resBytes, err := json.Marshal(res); err == nil {
+		w.WriteHeader(http.StatusOK)
+		w.Write(resBytes)
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	}
+}
+
+func renderErrorResponse(w http.ResponseWriter, status int, msg string) {
+	res := &ErrorRes{
 		Status:  status,
 		Message: msg,
 	}

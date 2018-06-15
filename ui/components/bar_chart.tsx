@@ -1,29 +1,46 @@
+// External imports
 import * as React from 'react';
 import * as Chart from 'chart.js';
 
+// Internal imports
+import { Colors } from './enums';
 
-class BarChart extends React.Component<any, any> {
+
+interface BarChartProps {
+    title: string;
+    label: string;
+    y: number[];
+    x: string[];
+}
+
+
+class BarChart extends React.Component<BarChartProps, any> {
     private chart: Chart;
 
     constructor(props) {
         super(props);
+    }
 
+    chartData(props): Chart.ChartData {
         const dataSet = {
-            label: 'Data Set 1',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
+            label: props.label,
+            backgroundColor: Colors.FETCH_BLUE,
+            borderColor: Colors.FETCH_BLUE,
             borderWidth: 1,
-            data: [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()]
-        };
+            data: props.y
+        }
 
-        const chartData = {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        const chartData: Chart.ChartData = {
+            labels: props.x,
             datasets: [dataSet]
-        };
+        }
 
-        this.state = {
-            data: chartData
-        };
+        return chartData;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.chart.data = this.chartData(nextProps);
+        this.chart.update();
     }
 
     componentDidMount() {
@@ -32,12 +49,12 @@ class BarChart extends React.Component<any, any> {
         const options: Chart.ChartOptions = {
             responsive: true,
             legend: { position: 'top' },
-            title: { display: true, text: 'Weekdays' }
+            title: { display: true, text: this.props.title }
         };
 
         const config: Chart.ChartConfiguration = {
             type: 'bar',
-            data: this.state.data,
+            data: this.chartData(this.props),
             options
         };
 

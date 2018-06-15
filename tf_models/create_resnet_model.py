@@ -23,7 +23,7 @@ def export_from_keras():
 
     print 'List of first few operations', operation_names[0:10]
 
-    builder = tf.saved_model.builder.SavedModelBuilder('resnet')
+    builder = tf.saved_model.builder.SavedModelBuilder('resnet_50_model')
     builder.add_meta_graph_and_variables(K.get_session(), ['serve'])
     builder.save()
 

@@ -97,12 +97,13 @@ func createImageTransformGraph(imgFormat string, numChan int64) (*tf.Graph, tf.O
 
 // Class refers to the classification of an image
 type Class struct {
-	Prob  float32
-	Index int
+	Prob  float32 `json:"prob"`
+	Index int     `json:"index"`
+	Name  string  `json:"name"`
 }
 
 // Sort will perform quick sort in place on a list of Class elements.
-func Sort(list []Class, low, high int) {
+func Sort(list []*Class, low, high int) {
 	if low < high {
 		partIdx := Partition(list, low, high)
 		Sort(list, low, partIdx-1)
@@ -111,7 +112,7 @@ func Sort(list []Class, low, high int) {
 }
 
 // Partition will perform quick sort partitioning in place.
-func Partition(list []Class, low, high int) int {
+func Partition(list []*Class, low, high int) int {
 	pivot := list[high]
 
 	i := low - 1 // Index of the smaller element
