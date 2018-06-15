@@ -4,3 +4,4 @@ node_modules/
 vendor/
 tf_models/resnet_50_model
 tf_models/mnist_model
+public/index.bundle.js
