@@ -62,7 +62,6 @@ class Index extends React.Component<any, IndexState> {
     handleImageFileSelected = (e: React.FormEvent<HTMLInputElement>): void => {
         const imageType = /image.*/;
         const file: File = e.currentTarget.files[0];
-
         if (file.type.match(imageType)) {
             this.fileReader.readAsDataURL(file);
 
@@ -94,10 +93,7 @@ class Index extends React.Component<any, IndexState> {
 
         return (
             <section className="image-loader">
-                <div className="image-container">
-                    {image}
-                </div>
-                <form>
+                <form className="image-upload-form">
                     <input className="image-input"
                             accept="image/*"
                             id="hidden-image-file-input" 
@@ -108,15 +104,19 @@ class Index extends React.Component<any, IndexState> {
                         <Button variant="contained" component="span">Upload</Button>
                     </label>
                 </form>
+                <div className="image-container">
+                    {image}
+                </div>
             </section>
         );
     }
 
-    get progresss(): JSX.Element {
+    get progress(): JSX.Element {
         if (this.state.isLoading) {
             return (
                 <div className="progress">
                     <CircularProgress />
+                    <p>TensorFlow is computing...</p>
                 </div>
             );
         }
@@ -140,7 +140,7 @@ class Index extends React.Component<any, IndexState> {
                 <section className="image-classifier">
                     {this.imageLoader}
                     {this.error}
-                    {this.progresss}
+                    {this.progress}
                 </section>
                 <BarChart 
                     title={"Results from ResNet-50"}

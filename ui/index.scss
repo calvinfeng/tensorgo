@@ -2,23 +2,74 @@
     font-family: 'Roboto';
 }
 
-.image-classifier {
-    display: flex;
-    flex-direction: column;
 
-    .image-loader {
+body {
+    width: 100%;
+    height: 100%;
+}
+
+#root {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+    .index-container {
         display: inherit;
-        flex-direction: inherit;
+        flex-direction: column;
+        max-width: 1024px;
+    
+        .image-classifier {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
         
-        .image-container { 
-            flex-direction: row;
+            .image-loader {
+                display: inherit;
+                flex-direction: inherit;
+                width: 100%;
+
+                .image-container {
+                    display: inherit; 
+                    flex-direction: row;
+                    width: 100%;
+                    justify-content: center;
+                    margin: 1rem;
+                }
+
+                .image-upload-form {
+                    display: inherit;
+                    flex-direction: row;
+                    max-height: 36px;
+                    width: 100%;
+                    justify-content: flex-end;
+
+                    label {
+                        display: inherit;
+                        flex-direction: inherit;
+                    }
+                }
+            }
+        
+            .progress {
+                margin: 1rem;
+                display: inherit;
+                flex-direction: row;
+
+                p {
+                    margin-left: 1rem;
+                }
+            }
+        }
+
+        #bar-chart{
+            width: 800px;
         }
     }
-
-    .progress {
-        margin: 1rem;
-    }
 }
+
+
 
 #hidden-image-file-input {
     display: none;
