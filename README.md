@@ -1,14 +1,23 @@
 # Image Classification - TensorFlow in Go
+## What is it?
+It's a simple application that allows you to upload an image and performs classification on it.
+
+First, user clicks upload and select an image:
+![demo-1](./assets/demo-1.png)
+
+Then the server will run the image through a residual neural network with 50 layers and compute an
+answer:
+
+![demo-2](./assets/demo-2.png)
+
 ## Run With Docker
 The easiest way to run this project is through docker. First, build the image.
-```
-docker build -t tensorgo .
-```
+
+    docker build -t tensorgo .
 
 And then run the image in a container and publish port to 3000
-```
-docker run --publish 3000:3000 tensorgo --rm
-```
+
+    docker run --publish 3000:3000 tensorgo
 
 Now you can see the app on `localhost:3000`!
 
