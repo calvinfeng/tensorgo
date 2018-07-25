@@ -11,6 +11,7 @@ answer:
 ![demo-2](./assets/demo-2.png)
 
 ## Run With Docker
+### Build The Image
 The easiest way to run this project is through docker. First, build the image.
 
     docker build -t tensorgo .
@@ -20,6 +21,25 @@ And then run the image in a container and publish port to 3000
     docker run --publish 3000:3000 tensorgo
 
 Now you can see the app on `localhost:3000`!
+
+### Didn't work?
+If you are experiencing error regarding model failed to load or complaint from TensorFlow about 
+`cannot find model`, then that means you probably need to run the Python script to build the model
+first and then build Docker image.
+
+Create a virtual environment and install requirements using `pip`:
+
+    virtualenv environment
+    source environment/bin/activate
+    pip install -r requirements.txt
+
+Now navigate to `tf_models/` folder and run one of the Python scripts:
+
+    python create_resnet_model.py
+
+Now build again:
+
+    docker build -t tensorgo .
 
 ## Run Without Docker
 ### Prerequisites
@@ -64,3 +84,20 @@ Then build it
 npm run build
 ```
 
+### Compile TensorFlow Model
+Create a virtual environment and install requirements using `pip`:
+
+    virtualenv environment
+    source environment/bin/activate
+    pip install -r requirements.txt
+
+Now navigate to `tf_models/` folder and run one of the Python scripts:
+
+    python create_resnet_model.py
+
+Now you are ready to go.
+
+## Start
+Simply do
+
+    tensorgo start
